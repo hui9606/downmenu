@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-
+#import "MenuOption.h"
 @interface ViewController ()
 
 @end
@@ -16,12 +16,36 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getMenuOption:) name:@"menuOptionNotification" object:nil];
+ 
+}
+- (IBAction)buttonClick:(UIButton *)sender {
+    
+    MenuOption *menu =[MenuOption menu];
+    menu.contentArray=@[@"按发布时间",@"按价格",@"取消"];
+    [menu showTableViewMenuFrom:sender];
+    
+    //弹出下拉菜单
+    NSLog(@"排序按钮点击了");
+
+
+    
+    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma  mark - 接收到排序条件
+-(void)getMenuOption:(NSNotification *)noti{
+    
+    NSNumber *selectedIndex=noti.userInfo[@"selectedIndex"];
+    NSLog(@"用户点击了%@",selectedIndex);
+
 }
+
+
+-(void)dealloc{    
+    //销毁 通知
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 @end
